@@ -119,9 +119,14 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     AHKActionSheetItem *item = self.items[(NSUInteger)indexPath.row];
 
-    NSDictionary *attributes = item.type == AHKActionSheetButtonTypeDefault ? self.buttonTextAttributes : self.destructiveButtonTextAttributes;
+    NSDictionary *attributes = item.type == AHKActionSheetButtonTypeDefault || item.type == AHKActionSheetButtonTypeMultiLine ? self.buttonTextAttributes : self.destructiveButtonTextAttributes;
     NSAttributedString *attrTitle = [[NSAttributedString alloc] initWithString:item.title attributes:attributes];
     cell.textLabel.attributedText = attrTitle;
+    if (item.type == AHKActionSheetButtonTypeMultiLine) {
+        cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        cell.textLabel.numberOfLines = 0;
+        [cell.textLabel sizeToFit];
+    }
     cell.textLabel.textAlignment = [self.buttonTextCenteringEnabled boolValue] ? NSTextAlignmentCenter : NSTextAlignmentLeft;
 
     // Use image with template mode with color the same as the text (when enabled).
